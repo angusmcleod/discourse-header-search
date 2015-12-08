@@ -2,7 +2,7 @@
 A Discourse plugin that makes the search bar visible in the header in the Desktop UI and hides the search menu icon.
 
 - Only affects Desktop UI. Does not apply to mobile web.
-- Is hidden when scrolling on a topic. See [Settings](## Settings).
+- Is hidden when scrolling on a topic. See [Settings](##Settings).
 
 ![screenshot](https://cloud.githubusercontent.com/assets/5931623/11663508/b1d24796-9daa-11e5-8622-422d5bda3ccf.png)
 
