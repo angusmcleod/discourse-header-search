@@ -10,7 +10,7 @@ export default Ember.Component.extend({
   typeFilter: null,
   showHeaderSearch: false,
 
-  @on('init')
+  @on('didInsertElement')
   @observes('currentPath')
   hideWhenFullPageSearch: function() {
     this.toggleHeaderSearch(Boolean(this.get('currentPath') !== "full-page-search"))
@@ -23,6 +23,15 @@ export default Ember.Component.extend({
   },
 
   toggleHeaderSearch: function(showHeaderSearch) {
+    if (this.siteSettings.override_extra_info) {
+      Ember.run.scheduleOnce('afterRender', this, function() {
+        $('.extra-info-wrapper').hide()
+      });
+      this.set('searchVisible', false)
+      $('#search-button').hide()
+      this.set('showHeaderSearch', true)
+      return
+    }
     if (showHeaderSearch) {
       this.set('searchVisible', false)
       $('#search-button').hide()
@@ -31,7 +40,7 @@ export default Ember.Component.extend({
       })
     } else {
       $(".results").hide()
-      this.set('searchService.term', '')
+      this.set('searchService.term', null)
       this.set('showHeaderSearch', false)
       $('#search-button').show()
     }

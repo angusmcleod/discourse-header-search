@@ -6,113 +6,114 @@
   margin-left: 20px;
   padding: 6px;
   position: relative;
-}
 
-#header-search-term {
-  background-color: #f1f1f1;
-  height: 20px;
-  width: 450px;
-  display: inline-block;
-  margin-bottom: 0;
-  &.searching-background {
-    background-color:rgba(0, 136, 204, 0.2);
-    animation: leftRightBackground 2s linear infinite;
-    background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.2) 40px);
-  }
-}
-
-.searching {
-  position: absolute;
-  top: -8px;
-  right: -20px;
-  display: none;
-  .spinner {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-.search-context {
-  padding-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
-  button {
-    padding: 5px 10px;
-  }
-}
-
-a.show-help {
-  position: absolute;
-  top: 12px;
-  left: 413px;
-  color: #C1C1C1;
-}
-
-.results {
-  background-color: #fff;
-  border-top: none;
-  box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
-  width: 460px;
-  position: absolute;
-  top: 40px;
-
-  ul {
-    list-style-type: none;
-    margin: 0 5px 5px 5px;
-  }
-
-  .heading {
-    padding: 5px 0 5px 5px;
-    .filter {
-      padding: 0 5px;
+  #header-search-term {
+    background-color: #f1f1f1;
+    height: 20px;
+    width: 450px;
+    display: inline-block;
+    margin-bottom: 0;
+    &.searching-background {
+      background-color:rgba(0, 136, 204, 0.2);
+      animation: leftRightBackground 2s linear infinite;
+      background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.2) 40px);
     }
   }
 
-  .no-results {
-    padding: 5px;
-    text-align: center;
+  .searching {
+    position: absolute;
+    top: -8px;
+    right: -20px;
+    display: none;
+    .spinner {
+      width: 10px;
+      height: 10px;
+    }
   }
 
-  .search-link {
-    .badge-category-parent {
-      line-height: 0.8em;
+  .search-context {
+    padding-left: 10px;
+    display: inline-block;
+    vertical-align: middle;
+    button {
+      padding: 5px 10px;
     }
-    .topic-title {
-      margin-right: 6px;
+  }
+
+  a.show-help {
+    position: absolute;
+    top: 12px;
+    left: 413px;
+    color: #C1C1C1;
+  }
+
+  .results {
+    background-color: #fff;
+    border-top: none;
+    box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
+    width: 460px;
+    position: absolute;
+    top: 40px;
+
+    ul {
+      list-style-type: none;
+      margin: 0 5px 5px 5px;
     }
 
-    .topic-statuses {
-      float: none;
-      display: inline-block;
-      color: dark-light-choose(scale-color($primary, $lightness: 50%), scale-color($secondary, $lightness: 50%));
-      margin: 0;
-      .fa {
-        margin: 0;
+    .heading {
+      padding: 5px 0 5px 5px;
+      .filter {
+        padding: 0 5px;
       }
     }
-  }
 
-  li:not(.category):not(.heading) {
-    font-size: 0.929em;
-    line-height: 16px;
-
-    .fa {
-      font-size: inherit;
-    }
-
-    a {
-      display: block;
+    .no-results {
       padding: 5px;
-      transition: all linear .15s;
+      text-align: center;
     }
 
-    &:hover a:not(.badge-notification) {
-      background-color: dark-light-diff($highlight, $secondary, 50%, -55%);
+    .search-link {
+      .badge-category-parent {
+        line-height: 0.8em;
+      }
+      .topic-title {
+        margin-right: 6px;
+      }
+
+      .topic-statuses {
+        float: none;
+        display: inline-block;
+        color: dark-light-choose(scale-color($primary, $lightness: 50%), scale-color($secondary, $lightness: 50%));
+        margin: 0;
+        .fa {
+          margin: 0;
+        }
+      }
     }
 
-    button {
-      margin-left: 5px;
+    li:not(.category):not(.heading) {
+      font-size: 0.929em;
+      line-height: 16px;
+
+      .fa {
+        font-size: inherit;
+      }
+
+      a {
+        display: block;
+        padding: 5px;
+        transition: all linear .15s;
+      }
+
+      &:hover a:not(.badge-notification) {
+        background-color: dark-light-diff($highlight, $secondary, 50%, -55%);
+      }
+
+      button {
+        margin-left: 5px;
+      }
     }
+    
   }
 }
 
