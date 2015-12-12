@@ -1,38 +1,40 @@
 {{#if showHeaderSearch}}
-  {{plugin-outlet "above-search"}}
-  {{search-text-field value=searchService.term id="header-search-term"}}
-  <div class="search-context">
-    {{#if searchService.searchContext}}
-      <button {{action "toggleContext"}} {{bind-attr class=":btn searchService.searchContextEnabled:filter"}}>
-        {{searchContextDescription}}
-      </button>
+  <div class="header-search-contents">
+    {{plugin-outlet "above-search"}}
+    {{search-text-field value=searchService.term id="header-search-term"}}
+    <div class="search-context">
+      {{#if searchService.searchContext}}
+        <button {{action "toggleContext"}} {{bind-attr class=":btn searchService.searchContextEnabled:filter"}}>
+          {{searchContextDescription}}
+        </button>
+      {{/if}}
+    </div>
+    <a href class="show-help" {{action "showSearchHelp" bubbles=false}}>{{i18n "show_help"}}</a>
+    {{#if loading}}
+      <div class="searching">{{loading-spinner}}</div>
+    {{else}}
+      <div class="results">
+      {{#if noResults}}
+        <div class="no-results">
+          {{i18n "search.no_results"}}
+        </div>
+      {{else}}
+        {{#each content.resultTypes as |resultType|}}
+          <ul>
+            <li class="heading row">{{resultType.name}}</li>
+            {{component resultType.componentName results=resultType.results term=searchService.term}}
+          </ul>
+          <div class="no-results">
+            {{#if resultType.moreUrl}}
+              <a href={{resultType.moreUrl}} class="filter">{{i18n "show_more"}} {{fa-icon "chevron-down"}}</a>
+            {{/if}}
+            {{#if resultType.more}}
+              <a href class="filter filter-type" {{action "moreOfType" resultType.type bubbles=false}}>{{i18n "show_more"}} {{fa-icon "chevron-down"}}</a>
+            {{/if}}
+          </div>
+        {{/each}}
+      {{/if}}
+      </div>
     {{/if}}
   </div>
-  <a href class="show-help" {{action "showSearchHelp" bubbles=false}}>{{i18n "show_help"}}</a>
-  {{#if loading}}
-    <div class="searching">{{loading-spinner}}</div>
-  {{else}}
-    <div class="results">
-    {{#if noResults}}
-      <div class="no-results">
-        {{i18n "search.no_results"}}
-      </div>
-    {{else}}
-      {{#each content.resultTypes as |resultType|}}
-        <ul>
-          <li class="heading row">{{resultType.name}}</li>
-          {{component resultType.componentName results=resultType.results term=searchService.term}}
-        </ul>
-        <div class="no-results">
-          {{#if resultType.moreUrl}}
-            <a href={{resultType.moreUrl}} class="filter">{{i18n "show_more"}} {{fa-icon "chevron-down"}}</a>
-          {{/if}}
-          {{#if resultType.more}}
-            <a href class="filter filter-type" {{action "moreOfType" resultType.type bubbles=false}}>{{i18n "show_more"}} {{fa-icon "chevron-down"}}</a>
-          {{/if}}
-        </div>
-      {{/each}}
-    {{/if}}
-    </div>
-  {{/if}}
 {{/if}}

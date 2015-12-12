@@ -13,37 +13,87 @@ export default Ember.Component.extend({
   @on('didInsertElement')
   @observes('currentPath')
   hideWhenFullPageSearch: function() {
-    this.toggleHeaderSearch(Boolean(this.get('currentPath') !== "full-page-search"))
+    this.toggleHeaderSearch(this.get('currentPath') !== "full-page-search")
   },
 
   @on('didInsertElement')
   @observes('showExtraInfo')
-  showSearchIcon: function() {
-    this.toggleHeaderSearch(Boolean(!this.get('showExtraInfo')))
+  hideWhenExtraInfo: function() {
+    this.toggleHeaderSearch(!this.get('showExtraInfo'))
   },
 
-  toggleHeaderSearch: function(showHeaderSearch) {
-    if (this.siteSettings.override_extra_info) {
-      Ember.run.scheduleOnce('afterRender', this, function() {
-        $('.extra-info-wrapper').hide()
-      });
+  @on('willClearRender')
+  removeWindowResize: function() {
+    this.toggleResizeEvent(false)
+  },
+
+  toggleHeaderSearch: function(showSearch) {
+    this.toggleSearchUI(showSearch)
+    this.toggleResizeEvent(showSearch)
+  },
+
+  toggleSearchUI: function(showHeaderSearch) {
+    if (showHeaderSearch) {
+      if (this.siteSettings.override_extra_info) {
+        Ember.run.scheduleOnce('afterRender', this, function() {
+          $('.extra-info-wrapper').hide()
+        });
+      }
       this.set('searchVisible', false)
       $('#search-button').hide()
       this.set('showHeaderSearch', true)
-      return
-    }
-    if (showHeaderSearch) {
-      this.set('searchVisible', false)
-      $('#search-button').hide()
-      Ember.run.later(this, function(){
-        this.set('showHeaderSearch', true)
-      })
+      Ember.run.scheduleOnce('afterRender', this, this.handleResize)
     } else {
       $(".results").hide()
       this.set('searchService.term', null)
       this.set('showHeaderSearch', false)
       $('#search-button').show()
     }
+  },
+
+  toggleResizeEvent: function(attachResizeEvent) {
+    if (attachResizeEvent) {
+      $(window).on('resize.headerResize', Ember.run.bind(this, function(){
+        Ember.run.throttle(this, this.handleResize, 200)
+      }))
+    } else {
+      $(window).off('resize.headerResize')
+    }
+  },
+
+  handleResize: function() {
+    const $wrap = $('.d-header > .wrap'),
+          buffer = $('.search-context').width() + 60,
+          maxWidth = 1110,
+          minWidth = 580 + buffer,
+          searchShowing = this.get('showHeaderSearch');
+    var wrapWidth = $wrap.width()
+    if (wrapWidth > minWidth) {
+      if (!searchShowing) {
+        this.toggleSearchUI(true)
+      }
+      if (wrapWidth < maxWidth) {
+        this.resizeHeaderSearch(buffer)
+      }
+    } else {
+      if (searchShowing) {
+        this.toggleSearchUI(false)
+      }
+    }
+  },
+
+  resizeHeaderSearch: function(buffer) {
+    const $contents = $('.d-header > .wrap > .contents'),
+          $headerSearch = $('.header-search-contents'),
+          total = $contents.width();
+    var notSearchWidth = 0;
+    $contents.children().width(function(i, width){
+      if (!$(this).hasClass('header-search-container')) {
+        notSearchWidth = notSearchWidth + width;
+      }
+    })
+    var difference = total - (notSearchWidth + buffer);
+    $headerSearch.css('width', difference)
   },
 
   @observes('searchService.searchContext')
