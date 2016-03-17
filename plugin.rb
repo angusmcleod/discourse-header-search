@@ -5,4 +5,4 @@
 
 enabled_site_setting :override_extra_info
 
-register_asset 'stylesheets/desktop.scss', :desktop
+register_asset 'stylesheets/header-search.scss', :desktop
