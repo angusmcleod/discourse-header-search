@@ -4,8 +4,8 @@
 }
 
 .header-search-contents {
-  max-width: 450px;
-  width: 450px;
+  max-width: 550px;
+  width: 550px;
   margin-left: 20px;
   padding: 5px;
   position: relative;
@@ -14,7 +14,7 @@
   #header-search-term {
     background-color: #f1f1f1;
     height: 20px;
-    width: 100%;
+    width: 73%;
     margin-bottom: 0;
     &.searching-background {
       background-color:rgba(0, 136, 204, 0.2);
@@ -35,7 +35,7 @@
   }
 
   .search-context {
-    padding-left: 10px;
+    width: 25%;
     display: inline-block;
     vertical-align: middle;
     button {
@@ -45,8 +45,8 @@
 
   a.show-help {
     position: absolute;
-    top: 12px;
-    right: 5px;
+    top: 11px;
+    right: 27%;
     color: #C1C1C1;
   }
 
@@ -54,7 +54,7 @@
     background-color: #fff;
     border-top: none;
     box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
-    width: calc(100% - 10px);
+    width: 73%;
     position: absolute;
     top: 40px;
     white-space: normal;

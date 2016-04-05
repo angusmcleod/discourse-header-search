@@ -62,38 +62,12 @@ export default Ember.Component.extend({
   },
 
   handleResize: function() {
-    const $wrap = $('.d-header > .wrap'),
-          buffer = $('.search-context').width() + 60,
-          maxWidth = 1110,
-          minWidth = 580 + buffer,
-          searchShowing = this.get('showHeaderSearch');
-    var wrapWidth = $wrap.width()
-    if (wrapWidth > minWidth) {
-      if (!searchShowing) {
-        this.toggleSearchUI(true)
-      }
-      if (wrapWidth < maxWidth) {
-        this.resizeHeaderSearch(buffer)
-      }
+    var searchShowing = this.get('showHeaderSearch');
+    if ($('.d-header > .wrap').width() > 900) {
+      if (!searchShowing) {this.toggleSearchUI(true)}
     } else {
-      if (searchShowing) {
-        this.toggleSearchUI(false)
-      }
+      if (searchShowing) {this.toggleSearchUI(false)}
     }
-  },
-
-  resizeHeaderSearch: function(buffer) {
-    const $contents = $('.d-header > .wrap > .contents'),
-          $headerSearch = $('.header-search-contents'),
-          total = $contents.width();
-    var notSearchWidth = 0;
-    $contents.children().width(function(i, width){
-      if (!$(this).hasClass('header-search-container')) {
-        notSearchWidth = notSearchWidth + width;
-      }
-    })
-    var difference = total - (notSearchWidth + buffer);
-    $headerSearch.css('width', difference)
   },
 
   @observes('searchService.searchContext')
