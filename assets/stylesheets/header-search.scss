@@ -1,9 +1,12 @@
 
-.header-search-container {
-  float: left;
+.d-header .title a {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.header-search-contents {
+.header-search {
+  display: inline-block;
+  vertical-align: middle;
   max-width: 550px;
   width: 550px;
   margin-left: 20px;
@@ -23,21 +26,14 @@
     }
   }
 
-  .searching {
-    position: absolute;
-    top: -8px;
-    right: -20px;
+  .searching .spinner {
     display: none;
-    .spinner {
-      width: 10px;
-      height: 10px;
-    }
   }
 
-  .search-context {
-    width: 25%;
+  .header-search-context {
     display: inline-block;
     vertical-align: middle;
+    padding: 0 10px;
     button {
       padding: 5px 10px;
     }
@@ -117,7 +113,6 @@
         margin-left: 5px;
       }
     }
-
   }
 }
 
