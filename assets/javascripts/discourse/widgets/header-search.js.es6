@@ -126,10 +126,15 @@ export default createWidget('header-search', {
 
   html(attrs, state) {
     state.contextEnabled = attrs.contextEnabled;
-    const aa = this.panelContents();
-    const link = h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`) } });
-
-    return [aa,link];
+    const origin_code = this.panelContents();
+    //const link = h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`) } });
+    const nav_contents = h('div.topic-extra-info', [
+      h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`) } }, '首页'),
+      h('a.header-link', { attributes: { href: Discourse.getURL(`/c/vrdiscuss`) } }, '讨论区'),
+      h('a.header-link', { attributes: { href: Discourse.getURL(`/c/vrdevices`) } }, '设备区')
+    ]);
+   
+    return [origin_code, nav_contents];
   },
 
   triggerSearch() {
