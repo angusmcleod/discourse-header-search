@@ -3,6 +3,7 @@ import { withPluginApi } from 'discourse/lib/plugin-api';
 import SiteHeader from 'discourse/components/site-header';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
+import { h } from 'virtual-dom';
 
 export default {
   name: 'header-search',
