@@ -126,8 +126,10 @@ export default createWidget('header-search', {
 
   html(attrs, state) {
     state.contextEnabled = attrs.contextEnabled;
+    const aa = this.panelContents();
+    const link = h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`) } });
 
-    return this.panelContents();
+    return [aa,link];
   },
 
   triggerSearch() {
@@ -184,14 +186,3 @@ export default createWidget('header-search', {
   }
 });
 
-export default createWidget('topic-extra-info', {
-  tagName: 'div.topic-extra-info',
-
-
-  html() {
-    
-    const link = h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`) } });
-
-    return [link, link];
-  }
-});
