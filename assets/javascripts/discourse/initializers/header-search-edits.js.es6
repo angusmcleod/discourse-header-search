@@ -12,7 +12,7 @@ export default {
       api.decorateWidget('home-logo:after', function(helper) {
         const header = helper.widget.parentWidget,
               path = helper.container.lookup('controller:application').get('currentPath');
-        if (!header.attrs.topic && path !== "full-page-search") {
+        if (!header.attrs.topic && path !== "full-page-search" && !helper.widget.site.mobileView) {
           return helper.attach('header-search', { contextEnabled: header.state.contextEnabled })
         }
       })
