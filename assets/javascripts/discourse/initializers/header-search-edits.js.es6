@@ -13,7 +13,7 @@ export default {
       api.decorateWidget('home-logo:after', function(helper) {
         const header = helper.widget.parentWidget,
               path = helper.container.lookup('controller:application').get('currentPath');
-        if (!header.attrs.topic && path !== "full-page-search") {
+        if (!header.attrs.topic && path !== "full-page-search" && !helper.widget.site.mobileView) {
           const origin_code = helper.attach('header-search', { contextEnabled: header.state.contextEnabled });
           const nav_contents = h('div.topic-extra-info.header-links-wrapper.clearfix', [
             h('a.header-link', { attributes: { href: Discourse.getURL(`/categories`), title: '论坛最新' } }, '首页'),
