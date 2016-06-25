@@ -4,6 +4,10 @@
   vertical-align: middle;
 }
 
+.header-search-enabled #search-button {
+  display: none;
+}
+
 .header-search {
   display: inline-block;
   vertical-align: middle;
