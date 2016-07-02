@@ -10,7 +10,7 @@ export default {
   initialize(){
 
     SiteHeader.reopen({
-      toggleHeaderSearch() {
+      toggleHeaderSearch(topicToggled) {
         var headerWidth = this.$('.d-header .contents').width(),
             panelWidth = this.$('.d-header .panel').width(),
             titleWidth = 730;
@@ -18,10 +18,10 @@ export default {
         var showHeaderSearch = Boolean(headerWidth > (panelWidth + titleWidth + 50)),
             currentState = appController.get('showHeaderSearch');
         appController.set('showHeaderSearch', showHeaderSearch)
-        if ((showHeaderSearch != currentState) || currentState === undefined) {
+        if (topicToggled || ((showHeaderSearch != currentState) || currentState === undefined)) {
           this.queueRerender()
           Ember.run.scheduleOnce('afterRender', () => {
-            if (showHeaderSearch) {
+            if (!$('.search-menu').length && showHeaderSearch && !this._topic) {
               $('.d-header').addClass('header-search-enabled')
             } else {
               $('.d-header').removeClass('header-search-enabled')
@@ -36,6 +36,8 @@ export default {
           this.toggleHeaderSearch()
         })
         $(window).on('resize', Ember.run.bind(this, this.toggleHeaderSearch))
+        this.appEvents.on('header:show-topic', () => this.toggleHeaderSearch(true))
+        this.appEvents.on('header:hide-topic', () => this.toggleHeaderSearch(true))
       },
 
       @on('willDestroyElement')
@@ -49,10 +51,14 @@ export default {
         const header = helper.widget.parentWidget,
               appController = helper.container.lookup('controller:application'),
               path = appController.get('currentPath'),
-              showHeaderSearch = appController.get('showHeaderSearch');
+              showHeaderSearch = appController.get('showHeaderSearch'),
+              searchVisible = header.state.searchVisible;
 
-        if (showHeaderSearch && !header.attrs.topic && path !== "full-page-search" && !helper.widget.site.mobileView) {
+        if (!searchVisible && showHeaderSearch && !header.attrs.topic && path !== "full-page-search" && !helper.widget.site.mobileView) {
+          $('.d-header').addClass('header-search-enabled')
           return helper.attach('header-search', { contextEnabled: header.state.contextEnabled })
+        } else {
+          $('.d-header').removeClass('header-search-enabled')
         }
       })
 
