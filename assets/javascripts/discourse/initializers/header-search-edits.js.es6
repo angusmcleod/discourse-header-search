@@ -1,4 +1,4 @@
-import ApplicationView from 'discourse/views/application';
+
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import SiteHeader from 'discourse/components/site-header';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
