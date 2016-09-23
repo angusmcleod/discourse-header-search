@@ -64,7 +64,7 @@ export default {
       api.attachWidgetAction('home-logo', 'click', function(e) {
         if (wantsNewWindow(e)) { return false; }
         e.preventDefault();
-        if (e.target.id === 'site-logo') {
+        if (e.target.id === 'site-logo' || e.target.id === 'site-text-logo') {
           DiscourseURL.routeTo(this.href());
         }
         return false;
