@@ -10,21 +10,21 @@ export default {
 
     SiteHeader.reopen({
       toggleHeaderSearch(topicToggled) {
-        var headerWidth = this.$('.d-header .contents').width(),
+        let headerWidth = this.$('.d-header .contents').width(),
             panelWidth = this.$('.d-header .panel').width(),
-            titleWidth = 730;
-        const appController = this.container.lookup('controller:application')
-        var showHeaderSearch = Boolean(headerWidth > (panelWidth + titleWidth + 50)),
-            currentState = appController.get('showHeaderSearch');
+            titleWidth = this.$('.d-header .title a').width() + 560, // 560 is the width of the search input
+            showHeaderSearch = headerWidth > (panelWidth + titleWidth + 50);
+
+        const appController = this.container.lookup('controller:application'),
+              currentState = appController.get('showHeaderSearch');
+
         appController.set('showHeaderSearch', showHeaderSearch)
         if (topicToggled || ((showHeaderSearch != currentState) || currentState === undefined)) {
           this.queueRerender()
           Ember.run.scheduleOnce('afterRender', () => {
-            if (!$('.search-menu').length && showHeaderSearch && !this._topic) {
-              $('.d-header').addClass('header-search-enabled')
-            } else {
-              $('.d-header').removeClass('header-search-enabled')
-            }
+            $('.d-header').toggleClass('header-search-enabled',
+              !$('.search-menu').length && showHeaderSearch && !this._topic
+            )
           })
         }
       },
