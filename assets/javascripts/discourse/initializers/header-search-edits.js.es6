@@ -24,7 +24,7 @@ export default {
             titleWidth = this.$('.d-header .title a').width() + 560, // 560 is the width of the search input
             showHeaderSearch = headerWidth > (panelWidth + titleWidth + 50);
 
-        const appController = this.container.lookup('controller:application'),
+        const appController = container.lookup('controller:application'),
               currentState = appController.get('showHeaderSearch');
 
         appController.set('showHeaderSearch', showHeaderSearch)
@@ -121,7 +121,7 @@ export default {
 
       api.decorateWidget('home-logo:after', function(helper) {
         const header = helper.widget.parentWidget,
-              appController = helper.container.lookup('controller:application'),
+              appController = helper.register.lookup('controller:application'),
               showHeaderSearch = appController.get('showHeaderSearch'),
               searchMenuVisible = header.state.searchVisible;
 
