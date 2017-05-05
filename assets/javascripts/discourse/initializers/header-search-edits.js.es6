@@ -99,6 +99,7 @@ export default {
         const formFactor = this.state.formFactor
         if (formFactor === 'header') {
           this.state.showHeaderResults = false
+          $('#search-term').val('')
           this.scheduleRerender()
         }
       })
