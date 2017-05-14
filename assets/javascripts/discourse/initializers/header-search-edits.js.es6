@@ -98,22 +98,24 @@ export default {
       api.attachWidgetAction('search-menu', 'linkClickedEvent', function() {
         const formFactor = this.state.formFactor
         if (formFactor === 'header') {
-          this.state.showHeaderResults = false
-          $('#search-term').val('')
-          this.scheduleRerender()
+          this.state.showHeaderResults = false;
+          this.scheduleRerender();
         }
       })
 
       const searchMenuWidget = container.lookupFactory('widget:search-menu');
       const panelContents = searchMenuWidget.prototype['panelContents'];
       api.attachWidgetAction('search-menu', 'panelContents', function() {
-        let formFactor = this.state.formFactor
-        let showHeaderResults = this.state.showHeaderResults == null || this.state.showHeaderResults === true
+        let formFactor = this.state.formFactor;
+        let showHeaderResults = this.state.showHeaderResults == null || this.state.showHeaderResults === true;
 
-        if (formFactor ==='menu' || showHeaderResults) {
-          return panelContents.call(this)
+        if (formFactor === 'menu' || showHeaderResults) {
+          return panelContents.call(this);
         } else {
-          let contents = panelContents.call(this)
+          let contents = panelContents.call(this);
+          Ember.run.scheduleOnce('afterRender', this, () => {
+            $('#search-term').val('');
+          })
           return contents.filter((widget) => {
             return widget.name != 'search-menu-results'
           })
