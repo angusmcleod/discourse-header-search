@@ -2,16 +2,7 @@ import { withPluginApi } from 'discourse/lib/plugin-api';
 import SiteHeader from 'discourse/components/site-header';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
-import { default as computed, on, observes } from 'ember-addons/ember-computed-decorators';
-
-const searchData = {
-  loading: false,
-  results: {},
-  noResults: false,
-  term: undefined,
-  typeFilter: null,
-  invalidTerm: false
-};
+import { default as computed, on } from 'ember-addons/ember-computed-decorators';
 
 export default {
   name: 'header-search',
@@ -22,103 +13,115 @@ export default {
         let headerWidth = this.$('.d-header .contents').width(),
             panelWidth = this.$('.d-header .panel').width(),
             titleWidth = this.$('.d-header .title a').width() + 560, // 560 is the width of the search input
-            showHeaderSearch = headerWidth > (panelWidth + titleWidth + 50);
+            showHeaderSearch = headerWidth > (panelWidth + titleWidth + 50); // 50 is a buffer
 
         const appController = container.lookup('controller:application'),
               currentState = appController.get('showHeaderSearch');
 
         appController.set('showHeaderSearch', showHeaderSearch)
         if (topicToggled || ((showHeaderSearch != currentState) || currentState === undefined)) {
-          this.queueRerender()
+          this.queueRerender();
           Ember.run.scheduleOnce('afterRender', () => {
             $('.d-header').toggleClass('header-search-enabled',
               !$('.search-menu').length && showHeaderSearch && !this._topic
-            )
-          })
+            );
+          });
         }
       },
 
       @on('didInsertElement')
       initSizeWatcher() {
         Ember.run.scheduleOnce('afterRender', () => {
-          this.toggleVisibility()
+          this.toggleVisibility();
         })
-        $(window).on('resize', Ember.run.bind(this, this.toggleVisibility))
-        this.appEvents.on('header:show-topic', () => this.toggleVisibility(true))
-        this.appEvents.on('header:hide-topic', () => this.toggleVisibility(true))
+        $(window).on('resize', Ember.run.bind(this, this.toggleVisibility));
+        this.appEvents.on('header:show-topic', () => this.toggleVisibility(true));
+        this.appEvents.on('header:hide-topic', () => this.toggleVisibility(true));
       },
 
       @on('willDestroyElement')
       destroySizeWatcher() {
-        $(window).off('resize', Ember.run.bind(this, this.toggleVisibility))
+        $(window).off('resize', Ember.run.bind(this, this.toggleVisibility));
       }
     })
 
-    withPluginApi('0.1', api => {
+    const searchMenuWidget = container.factoryFor('widget:search-menu');
+    const corePanelContents = searchMenuWidget.class.prototype['panelContents'];
 
-      api.attachWidgetAction('search-menu', 'html', function() {
-        this.tagName = `div.search-${this.state.formFactor}`
-        if (this.state.formFactor === 'header') {
-          return this.panelContents();
-        } else {
-          return this.attach('menu-panel', { maxWidth: 500, contents: () => this.panelContents() });
-        }
-      })
+    withPluginApi('0.8.9', api => {
+      api.reopenWidget('search-menu', {
+        buildKey(attrs) {
+          let type = attrs.formFactor || 'menu'
+          return `search-${type}`
+        },
 
-      api.attachWidgetAction('search-menu', 'buildKey', function(attrs) {
-        let type = attrs.formFactor || 'menu'
-        return `search-${type}`
-      })
+        defaultState(attrs) {
+          return {
+            formFactor: attrs.formFactor || 'menu',
+            showHeaderResults: false
+          }
+        },
 
-      api.attachWidgetAction('search-menu', 'defaultState', function(attrs) {
-        return {
-          formFactor: attrs.formFactor || 'menu',
-          showHeaderResults: false
-        }
-      })
+        html() {
+          this.tagName = `div.search-${this.state.formFactor}`;
 
-      api.attachWidgetAction('search-menu', 'clickOutside', function() {
-        const formFactor = this.state.formFactor
-        if (formFactor === 'menu') {
-          return this.sendWidgetAction('toggleSearchMenu');
-        } else {
-          this.state.showHeaderResults = false
-          this.scheduleRerender()
-        }
-      })
+          if (this.state.formFactor === 'header') {
+            return this.panelContents();
+          } else {
+            return this.attach('menu-panel', {
+              maxWidth: 500,
+              contents: () => this.panelContents()
+            });
+          }
+        },
 
-      api.attachWidgetAction('search-menu', 'click', function() {
-        const formFactor = this.state.formFactor
-        if (formFactor === 'header') {
-          this.state.showHeaderResults = true
-          this.scheduleRerender()
-        }
-      })
+        clickOutside() {
+          const formFactor = this.state.formFactor;
 
-      api.attachWidgetAction('search-menu', 'linkClickedEvent', function() {
-        const formFactor = this.state.formFactor
-        if (formFactor === 'header') {
-          this.state.showHeaderResults = false;
-          this.scheduleRerender();
-        }
-      })
+          if (formFactor === 'menu') {
+            return this.sendWidgetAction('toggleSearchMenu');
+          } else {
+            this.state.showHeaderResults = false;
+            this.scheduleRerender();
+          }
+        },
 
-      const searchMenuWidget = container.lookupFactory('widget:search-menu');
-      const panelContents = searchMenuWidget.prototype['panelContents'];
-      api.attachWidgetAction('search-menu', 'panelContents', function() {
-        let formFactor = this.state.formFactor;
-        let showHeaderResults = this.state.showHeaderResults == null || this.state.showHeaderResults === true;
+        click() {
+          const formFactor = this.state.formFactor;
 
-        if (formFactor === 'menu' || showHeaderResults) {
-          return panelContents.call(this);
-        } else {
-          let contents = panelContents.call(this);
-          Ember.run.scheduleOnce('afterRender', this, () => {
-            $('#search-term').val('');
-          })
-          return contents.filter((widget) => {
-            return widget.name != 'search-menu-results'
-          })
+          if (formFactor === 'header') {
+            this.state.showHeaderResults = true;
+            this.scheduleRerender();
+          }
+        },
+
+        linkClickedEvent() {
+          const formFactor = this.state.formFactor;
+
+          if (formFactor === 'header') {
+            this.state.showHeaderResults = false;
+            this.scheduleRerender();
+          }
+        },
+
+        panelContents() {
+          const formFactor = this.state.formFactor;
+          let showHeaderResults = this.state.showHeaderResults == null ||
+                                  this.state.showHeaderResults === true;
+
+          if (formFactor === 'menu' || showHeaderResults) {
+            return corePanelContents.call(this);
+          } else {
+            let contents = corePanelContents.call(this);
+
+            Ember.run.scheduleOnce('afterRender', this, () => {
+              $('#search-term').val('');
+            })
+
+            return contents.filter((widget) => {
+              return widget.name != 'search-menu-results';
+            })
+          }
         }
       })
 
@@ -129,19 +132,25 @@ export default {
               searchMenuVisible = header.state.searchVisible;
 
         if (!searchMenuVisible && showHeaderSearch && !header.attrs.topic && !helper.widget.site.mobileView) {
-          $('.d-header').addClass('header-search-enabled')
-          return helper.attach('search-menu', { contextEnabled: header.state.contextEnabled, formFactor: 'header' })
+          $('.d-header').addClass('header-search-enabled');
+
+          return helper.attach('search-menu', {
+            contextEnabled: header.state.contextEnabled,
+            formFactor: 'header'
+          });
         } else {
-          $('.d-header').removeClass('header-search-enabled')
+          $('.d-header').removeClass('header-search-enabled');
         }
       })
 
-      api.attachWidgetAction('home-logo', 'click', function(e) {
-        if (wantsNewWindow(e)) { return false; }
+      api.reopenWidget('home-logo', 'click', function(e) {
+        if (wantsNewWindow(e)) return false;
         e.preventDefault();
+
         if (e.target.id === 'site-logo' || e.target.id === 'site-text-logo') {
           DiscourseURL.routeTo(this.href());
         }
+
         return false;
       })
     })
