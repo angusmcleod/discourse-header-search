@@ -19,15 +19,10 @@
   white-space: nowrap;
 
   #search-term {
-    background-color: #f1f1f1;
+    background-color: $secondary;
     height: 20px;
     width: 73%;
     margin-bottom: 0;
-    &.searching-background {
-      background-color:rgba(0, 136, 204, 0.2);
-      animation: leftRightBackground 2s linear infinite;
-      background-image: repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,255,255,.2) 20px, rgba(255,255,255,.2) 40px);
-    }
   }
 
   label {
@@ -48,11 +43,11 @@
     position: absolute;
     top: 11px;
     right: 27%;
-    color: #C1C1C1;
+    color: $primary;
   }
 
   .results {
-    background-color: #fff;
+    background-color: $secondary;
     border-top: none;
     box-shadow: 0 3px 5px -2px rgba(0, 0, 0, 0.5);
     width: 73%;
@@ -119,14 +114,4 @@
       }
     }
   }
-}
-
-.btn.filter {
-  background-color: #0088cc;
-  color: #fff;
-}
-
-@keyframes leftRightBackground {
-  0% { background-position: 0 0; }
-  100% { background-position: 463px 0; }
 }
