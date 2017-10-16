@@ -3,6 +3,4 @@
 # version: 0.1
 # authors: Angus McLeod
 
-enabled_site_setting :override_extra_info
-
 register_asset 'stylesheets/header-search.scss', :desktop
