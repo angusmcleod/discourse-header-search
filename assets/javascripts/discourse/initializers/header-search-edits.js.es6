@@ -2,7 +2,7 @@ import { withPluginApi } from 'discourse/lib/plugin-api';
 import SiteHeader from 'discourse/components/site-header';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
-import { default as computed, on } from 'ember-addons/ember-computed-decorators';
+import { on } from 'ember-addons/ember-computed-decorators';
 
 export default {
   name: 'header-search',
@@ -18,8 +18,8 @@ export default {
         const appController = container.lookup('controller:application'),
               currentState = appController.get('showHeaderSearch');
 
-        appController.set('showHeaderSearch', showHeaderSearch)
-        if (topicToggled || ((showHeaderSearch != currentState) || currentState === undefined)) {
+        appController.set('showHeaderSearch', showHeaderSearch);
+        if (topicToggled || ((showHeaderSearch !== currentState) || currentState === undefined)) {
           this.queueRerender();
           Ember.run.scheduleOnce('afterRender', () => {
             $('.d-header').toggleClass('header-search-enabled',
@@ -33,7 +33,7 @@ export default {
       initSizeWatcher() {
         Ember.run.scheduleOnce('afterRender', () => {
           this.toggleVisibility();
-        })
+        });
         $(window).on('resize', Ember.run.bind(this, this.toggleVisibility));
         this.appEvents.on('header:show-topic', () => this.toggleVisibility(true));
         this.appEvents.on('header:hide-topic', () => this.toggleVisibility(true));
@@ -43,7 +43,7 @@ export default {
       destroySizeWatcher() {
         $(window).off('resize', Ember.run.bind(this, this.toggleVisibility));
       }
-    })
+    });
 
     const searchMenuWidget = container.factoryFor('widget:search-menu');
     const corePanelContents = searchMenuWidget.class.prototype['panelContents'];
@@ -51,15 +51,15 @@ export default {
     withPluginApi('0.8.9', api => {
       api.reopenWidget('search-menu', {
         buildKey(attrs) {
-          let type = attrs.formFactor || 'menu'
-          return `search-${type}`
+          let type = attrs.formFactor || 'menu';
+          return `search-${type}`;
         },
 
         defaultState(attrs) {
           return {
             formFactor: attrs.formFactor || 'menu',
             showHeaderResults: false
-          }
+          };
         },
 
         html() {
@@ -116,14 +116,14 @@ export default {
 
             Ember.run.scheduleOnce('afterRender', this, () => {
               $('#search-term').val('');
-            })
+            });
 
             return contents.filter((widget) => {
-              return widget.name != 'search-menu-results';
-            })
+              return widget.name !== 'search-menu-results';
+            });
           }
         }
-      })
+      });
 
       api.decorateWidget('home-logo:after', function(helper) {
         const header = helper.widget.parentWidget,
@@ -141,7 +141,7 @@ export default {
         } else {
           $('.d-header').removeClass('header-search-enabled');
         }
-      })
+      });
 
       api.reopenWidget('home-logo', 'click', function(e) {
         if (wantsNewWindow(e)) return false;
@@ -152,7 +152,7 @@ export default {
         }
 
         return false;
-      })
-    })
+      });
+    });
   }
-}
+};
