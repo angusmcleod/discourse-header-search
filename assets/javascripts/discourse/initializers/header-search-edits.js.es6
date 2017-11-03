@@ -50,6 +50,8 @@ export default {
 
     withPluginApi('0.8.9', api => {
       api.reopenWidget('search-menu', {
+        tagName: 'div',
+
         buildKey(attrs) {
           let type = attrs.formFactor || 'menu';
           return `search-${type}`;
@@ -62,9 +64,11 @@ export default {
           };
         },
 
-        html() {
-          this.tagName = `div.search-${this.state.formFactor}`;
+        buildClasses() {
+          return [`search-${this.state.formFactor}`];
+        },
 
+        html() {
           if (this.state.formFactor === 'header') {
             return this.panelContents();
           } else {
