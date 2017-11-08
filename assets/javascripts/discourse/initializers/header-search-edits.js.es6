@@ -50,8 +50,6 @@ export default {
 
     withPluginApi('0.8.9', api => {
       api.reopenWidget('search-menu', {
-        tagName: 'div',
-
         buildKey(attrs) {
           let type = attrs.formFactor || 'menu';
           return `search-${type}`;
