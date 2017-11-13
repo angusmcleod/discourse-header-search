@@ -23,11 +23,6 @@
     width: 98%;
   }
 
-  label {
-    margin: 0;
-    line-height: 30px;
-  }
-
   .searching .spinner {
     display: none;
   }
@@ -38,15 +33,21 @@
   }
 
   .search-context {
-    padding: 0 10px;
     display: inline-block;
-  }
 
-  a.show-help {
-    position: absolute;
-    top: 11px;
-    right: 27%;
-    color: $primary;
+    > label {
+      margin-right: 15px;
+      font-size: 1em;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    a.show-help {
+      display: inline-block;
+      float: none;
+      color: $primary;
+      margin-right: 0;
+    }
   }
 
   .results {
