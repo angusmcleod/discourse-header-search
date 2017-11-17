@@ -23,7 +23,7 @@ export default {
           this.queueRerender();
           Ember.run.scheduleOnce('afterRender', () => {
             $('.d-header').toggleClass('header-search-enabled',
-              !$('.search-menu').length && showHeaderSearch && !this._topic
+              !$('.panel > .search-menu').length && showHeaderSearch && !this._topic
             );
           });
         }
