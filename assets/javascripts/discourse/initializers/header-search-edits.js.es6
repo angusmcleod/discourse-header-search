@@ -145,15 +145,17 @@ export default {
         }
       });
 
-      api.reopenWidget('home-logo', 'click', function(e) {
-        if (wantsNewWindow(e)) return false;
-        e.preventDefault();
+      api.reopenWidget('home-logo', {
+        click(e) {
+          if (wantsNewWindow(e)) return false;
+          e.preventDefault();
 
-        if (e.target.id === 'site-logo' || e.target.id === 'site-text-logo') {
-          DiscourseURL.routeTo(this.href());
+          if (e.target.id === 'site-logo' || e.target.id === 'site-text-logo') {
+            DiscourseURL.routeTo(this.href());
+          }
+
+          return false;
         }
-
-        return false;
       });
     });
   }
