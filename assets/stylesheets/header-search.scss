@@ -10,8 +10,8 @@
 
 .search-header {
   display: inline-block;
-  max-width: 550px;
-  width: 550px;
+  max-width: 610px;
+  width: 610px;
   margin-left: 20px;
   padding: 5px;
   position: relative;
@@ -20,7 +20,7 @@
   #search-term {
     background-color: $secondary;
     margin: 0;
-    width: 98%;
+    width: 100%;
   }
 
   .searching .spinner {
@@ -28,8 +28,9 @@
   }
 
   .search-input {
-    width: 76%;
+    width: 67%;
     display: inline-block;
+    margin-right: 10px;
   }
 
   .search-context {
