@@ -12,7 +12,7 @@ export default {
       toggleVisibility(topicToggled) {
         let headerWidth = this.$('.d-header .contents').width(),
             panelWidth = this.$('.d-header .panel').width(),
-            titleWidth = this.$('.d-header .title a').width() + 560, // 560 is the width of the search input
+            titleWidth = this.$('.d-header .title a').width() + 680, // 680 is the width of the search input
             showHeaderSearch = headerWidth > (panelWidth + titleWidth + 50); // 50 is a buffer
 
         const appController = container.lookup('controller:application'),
