@@ -1,7 +1,6 @@
-
 .d-header .title a {
   display: inline-block;
-  vertical-align: middle;
+  vertical-align: top;
 }
 
 .header-search-enabled #search-button {
@@ -10,8 +9,9 @@
 
 .search-header {
   display: inline-block;
-  max-width: 680px;
-  width: 680px;
+  vertical-align: top;
+  max-width: 600px;
+  width: 600px;
   margin-left: 20px;
   padding: 5px;
   position: relative;
@@ -28,24 +28,27 @@
   }
 
   .search-input {
-    width: 60%;
+    width: 63%;
     display: inline-block;
     margin-right: 10px;
   }
 
   .search-context {
     display: inline-block;
+    padding: 0;
 
     > label {
-      margin-right: 15px;
-      font-size: 1em;
+      margin-right: 10px;
+      font-size: .92em;
       display: inline-block;
       vertical-align: middle;
+      line-height: 19px;
     }
 
     a.show-help {
       display: inline-block;
       float: none;
+      font-size: .92em;
       color: $primary;
       margin-right: 0;
     }
