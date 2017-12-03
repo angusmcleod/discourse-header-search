@@ -4,21 +4,6 @@ import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
 import { on } from 'ember-addons/ember-computed-decorators';
 
-// from https://stackoverflow.com/questions/2707790/get-a-css-value-from-external-style-sheet-with-javascript-jquery
-function getStyleSheetPropertyValue(selectorText, propertyName) {
-  // search backwards because the last match is more likely the right one
-  for (var s= document.styleSheets.length - 1; s >= 0; s--) {
-    var cssRules = document.styleSheets[s].cssRules ||
-            document.styleSheets[s].rules || []; // IE support
-    for (var c=0; c < cssRules.length; c++) {
-      if (cssRules[c].selectorText === selectorText)
-        return cssRules[c].style[propertyName];
-    }
-  }
-  return null;
-}
-
-
 export default {
   name: 'header-search',
   initialize(container){
@@ -28,8 +13,11 @@ export default {
         const headerWidth = this.$('.d-header .contents').width();
         const panelWidth = this.$('.d-header .panel').width();
         const logoWidth = this.$('.d-header .title a').width();
-        const searchWidthStr = getStyleSheetPropertyValue('.search-header', 'width');
-        const searchWidth = searchWidthStr ? parseInt(searchWidthStr) : 600; // needs a backup
+
+        const $searchHeader = $('<div class="search-header"/>').hide().appendTo("body");
+        const searchWidth = parseInt($searchHeader.css("width"));
+        $searchHeader.remove();
+        
         const showHeaderSearch = headerWidth > (panelWidth + logoWidth + searchWidth + 30); // 30 is a buffer
         const appController = container.lookup('controller:application');
         const currentState = appController.get('showHeaderSearch');
