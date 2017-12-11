@@ -17,7 +17,7 @@ export default {
         const $searchHeader = $('<div class="search-header"/>').hide().appendTo("body");
         const searchWidth = parseInt($searchHeader.css("width"));
         $searchHeader.remove();
-        
+
         const showHeaderSearch = headerWidth > (panelWidth + logoWidth + searchWidth + 30); // 30 is a buffer
         const appController = container.lookup('controller:application');
         const currentState = appController.get('showHeaderSearch');
@@ -132,7 +132,7 @@ export default {
       });
 
       api.decorateWidget('home-logo:after', function(helper) {
-        const header = helper.widget.parentWidget,
+        const header = helper.widget.parentWidget.parentWidget,
               appController = helper.register.lookup('controller:application'),
               showHeaderSearch = appController.get('showHeaderSearch'),
               searchMenuVisible = header.state.searchVisible;
