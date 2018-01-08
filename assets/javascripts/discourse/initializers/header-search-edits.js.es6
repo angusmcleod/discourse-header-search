@@ -67,7 +67,13 @@ export default {
         },
 
         buildClasses() {
-          return [`search-${this.state.formFactor}`];
+          const formFactor = this.state.formFactor;
+          const showHeaderResults = this.state.showHeaderResults;
+          let classes = [`search-${formFactor}`];
+          if (formFactor === 'header' && showHeaderResults) {
+              classes.push('show-header-results');
+          }
+          return classes;
         },
 
         html() {
@@ -94,11 +100,14 @@ export default {
 
         click() {
           const formFactor = this.state.formFactor;
-
           if (formFactor === 'header') {
-            this.state.showHeaderResults = true;
-            this.scheduleRerender();
+              this.showResults();
           }
+        },
+
+        showResults() {
+          this.state.showHeaderResults = true;
+          this.scheduleRerender();
         },
 
         linkClickedEvent() {
@@ -112,20 +121,24 @@ export default {
 
         panelContents() {
           const formFactor = this.state.formFactor;
-          let showHeaderResults = this.state.showHeaderResults == null ||
-                                  this.state.showHeaderResults === true;
+          let showHeaderResults = this.state.showHeaderResults == null || this.state.showHeaderResults === true;
+          let contents = [this.attach('button', {
+              icon: 'search',
+              className: 'search-icon',
+              action: 'showResults'
+          })];
+
+          contents = contents.concat(...corePanelContents.call(this));
 
           if (formFactor === 'menu' || showHeaderResults) {
-            return corePanelContents.call(this);
+            return contents;
           } else {
-            let contents = corePanelContents.call(this);
-
             Ember.run.scheduleOnce('afterRender', this, () => {
               $('#search-term').val('');
-            });
+            })
 
             return contents.filter((widget) => {
-              return widget.name !== 'search-menu-results';
+              return widget.name != 'search-menu-results' && widget.name != 'search-context';
             });
           }
         }
