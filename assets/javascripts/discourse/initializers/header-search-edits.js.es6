@@ -8,51 +8,53 @@ export default {
   name: 'header-search',
   initialize(container){
 
-    SiteHeader.reopen({
-      toggleVisibility(topicToggled) {
-        const headerWidth = this.$('.d-header .contents').width();
-        const panelWidth = this.$('.d-header .panel').width();
-        const logoWidth = this.$('.d-header .title a').width();
-
-        const $searchHeader = $('<div class="search-header"/>').hide().appendTo("body");
-        const searchWidth = parseInt($searchHeader.css("width"));
-        $searchHeader.remove();
-
-        const showHeaderSearch = headerWidth > (panelWidth + logoWidth + searchWidth + 30); // 30 is a buffer
-        const appController = container.lookup('controller:application');
-        const currentState = appController.get('showHeaderSearch');
-
-        appController.set('showHeaderSearch', showHeaderSearch);
-        if (topicToggled || ((showHeaderSearch !== currentState) || currentState === undefined)) {
-          this.queueRerender();
-          Ember.run.scheduleOnce('afterRender', () => {
-            $('.d-header').toggleClass('header-search-enabled',
-              !$('.panel > .search-menu').length && showHeaderSearch && !this._topic
-            );
-          });
-        }
-      },
-
-      @on('didInsertElement')
-      initSizeWatcher() {
-        Ember.run.scheduleOnce('afterRender', () => {
-          this.toggleVisibility();
-        });
-        $(window).on('resize', Ember.run.bind(this, this.toggleVisibility));
-        this.appEvents.on('header:show-topic', () => this.toggleVisibility(true));
-        this.appEvents.on('header:hide-topic', () => this.toggleVisibility(true));
-      },
-
-      @on('willDestroyElement')
-      destroySizeWatcher() {
-        $(window).off('resize', Ember.run.bind(this, this.toggleVisibility));
-      }
-    });
-
     const searchMenuWidget = container.factoryFor('widget:search-menu');
     const corePanelContents = searchMenuWidget.class.prototype['panelContents'];
 
     withPluginApi('0.8.9', api => {
+
+      api.modifyClass('component:site-header', {
+        toggleVisibility(topicToggled) {
+          const headerWidth = this.$('.d-header .contents').width();
+          const panelWidth = this.$('.d-header .panel').width();
+          const logoWidth = this.$('.d-header .title a').width();
+
+          const $searchHeader = $('<div class="search-header"/>').hide().appendTo("body");
+          const searchWidth = parseInt($searchHeader.css("width"));
+          $searchHeader.remove();
+
+          const appController = api.container.lookup('controller:application');
+          const currentState = appController.get('showHeaderSearch');
+          const hideHeaderSearch = this.get('hideHeaderSearch');
+          const showHeaderSearch = !hideHeaderSearch && (headerWidth > (panelWidth + logoWidth + searchWidth + 30)); // 30 is a buffer
+
+          appController.set('showHeaderSearch', showHeaderSearch);
+          if (topicToggled || ((showHeaderSearch !== currentState) || currentState === undefined)) {
+            this.queueRerender();
+            Ember.run.scheduleOnce('afterRender', () => {
+              $('.d-header').toggleClass('header-search-enabled',
+                !$('.panel > .search-menu').length && showHeaderSearch && !this._topic
+              );
+            });
+          }
+        },
+
+        @on('didInsertElement')
+        initSizeWatcher() {
+          Ember.run.scheduleOnce('afterRender', () => {
+            this.toggleVisibility();
+          });
+          $(window).on('resize', Ember.run.bind(this, this.toggleVisibility));
+          this.appEvents.on('header:show-topic', () => this.toggleVisibility(true));
+          this.appEvents.on('header:hide-topic', () => this.toggleVisibility(true));
+        },
+
+        @on('willDestroyElement')
+        destroySizeWatcher() {
+          $(window).off('resize', Ember.run.bind(this, this.toggleVisibility));
+        }
+      });
+
       api.reopenWidget('search-menu', {
         buildKey(attrs) {
           let type = attrs.formFactor || 'menu';
