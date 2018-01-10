@@ -1,5 +1,4 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
-import SiteHeader from 'discourse/components/site-header';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
 import { on } from 'ember-addons/ember-computed-decorators';
@@ -124,11 +123,15 @@ export default {
         panelContents() {
           const formFactor = this.state.formFactor;
           let showHeaderResults = this.state.showHeaderResults == null || this.state.showHeaderResults === true;
-          let contents = [this.attach('button', {
-              icon: 'search',
-              className: 'search-icon',
-              action: 'showResults'
-          })];
+          let contents = [];
+
+          if (formFactor === 'header') {
+            contents.push(this.attach('button', {
+                icon: 'search',
+                className: 'search-icon',
+                action: 'showResults'
+            }));
+          }
 
           contents = contents.concat(...corePanelContents.call(this));
 
@@ -137,10 +140,10 @@ export default {
           } else {
             Ember.run.scheduleOnce('afterRender', this, () => {
               $('#search-term').val('');
-            })
+            });
 
             return contents.filter((widget) => {
-              return widget.name != 'search-menu-results' && widget.name != 'search-context';
+              return widget.name !== 'search-menu-results' && widget.name !== 'search-context';
             });
           }
         }
