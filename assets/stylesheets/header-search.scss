@@ -3,6 +3,10 @@
   vertical-align: top;
 }
 
+.header-search-enabled .search-header a, .header-search-enabled .search-header a:visited {
+  color: $tertiary;
+}
+
 .header-search-enabled #search-button {
   display: none;
 }
