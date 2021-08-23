@@ -1,7 +1,7 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import { wantsNewWindow } from 'discourse/lib/intercept-click';
 import DiscourseURL from 'discourse/lib/url';
-import { on } from 'ember-addons/ember-computed-decorators';
+import { on } from "discourse-common/utils/decorators";
 
 export default {
   name: 'header-search',
