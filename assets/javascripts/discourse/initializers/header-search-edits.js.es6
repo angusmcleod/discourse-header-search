@@ -14,9 +14,9 @@ export default {
 
       api.modifyClass('component:site-header', {
         toggleVisibility(topicToggled) {
-          const headerWidth = this.$('.d-header .contents').width();
-          const panelWidth = this.$('.d-header .panel').width();
-          const logoWidth = this.$('.d-header .title a').width();
+          const headerWidth = $('.d-header .contents', this.element).width();
+          const panelWidth = $('.d-header .panel', this.element).width();
+          const logoWidth = $('.d-header .title a', this.element).width();
 
           const $searchHeader = $('<div class="search-header"/>').hide().appendTo("body");
           const searchWidth = parseInt($searchHeader.css("width"));
